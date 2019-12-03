@@ -12,34 +12,30 @@ public class Main {
         line1 = line1.substring(0, 4);
         List<Integer> years = new ArrayList<>(); 
         years.add(Integer.parseInt(line1));*/
+
         Map<Integer, HashMap> listOfYears = new HashMap<>();
-        listOfYears = getYear();
-        listOfYears = addMonthAndRate(listOfYears);
+        listOfYears = addMonthAndRate();
         System.out.println(listOfYears);
-    }
 
-    public static Map getYear() throws IOException {
-        File file = new File("/home/misi/Downloads/euro.txt");
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String st;
-        int counter = 0;
-        Map<Integer, HashMap> listOfYears = new HashMap<>();
-        while ((st = br.readLine()) != null) {
-            if (counter > 0) {
-                String[] year = st.split(" ", 3);
-                listOfYears.put(Integer.parseInt(year[0]), new HashMap());
+        for (Map.Entry<Integer, HashMap> entry : listOfYears.entrySet()) {
+            //System.out.print(entry.getKey() + ". ");
+            HashMap<Integer, Integer> innerMap = entry.getValue();
+            for(Map.Entry<Integer, Integer> innerEntry : innerMap.entrySet()) {
+                System.out.println(entry.getKey() + ". " + monthReturner(innerEntry.getKey()) + ": " + forintReturner(innerEntry.getValue()) + " forint " +
+                        fillerReturner(innerEntry.getValue()) + " fillér.");
             }
-            counter++;
         }
-        return listOfYears;
+
+
     }
 
-    public static Map addMonthAndRate(Map listOfYears) throws IOException {
+    public static Map addMonthAndRate() throws IOException {
         File file = new File("/home/misi/Downloads/euro.txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
         String st;
         int counter = 0;
         HashMap<Integer, Integer> innerMap = new HashMap<>();
+        Map<Integer, HashMap> listOfYears = new HashMap<>();
         while ((st = br.readLine()) != null) {
             if (counter > 0) {
                 String[] year = st.split(" ", 3);
@@ -51,6 +47,32 @@ public class Main {
         }
         return listOfYears;
     }
+
+    public static String monthReturner (int number) {
+        if (number == 1) return "január";
+        if (number == 2) return "február";
+        if (number == 3) return "március";
+        if (number == 4) return "április";
+        if (number == 5) return "május";
+        if (number == 6) return "június";
+        if (number == 7) return "július";
+        if (number == 8) return "augusztus";
+        if (number == 9) return "szeptember";
+        if (number == 10) return "október";
+        if (number == 11) return "november";
+        if (number == 12) return "december";
+        else return " ";
+    }
+
+    public static int forintReturner (int number) {
+        return number / 100;
+    }
+
+    public static int fillerReturner (int number) {
+        return number % 100;
+    }
+
+     
 }
 
 
