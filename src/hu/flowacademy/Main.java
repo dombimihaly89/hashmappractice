@@ -8,25 +8,24 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        /*String line1 = Files.readAllLines(Paths.get("/home/misi/Downloads/euro.txt")).get(1);
-        line1 = line1.substring(0, 4);
-        List<Integer> years = new ArrayList<>(); 
-        years.add(Integer.parseInt(line1));*/
-
         Map<Integer, HashMap> listOfYears = new HashMap<>();
-        listOfYears = addMonthAndRate();
-        System.out.println(listOfYears);
+        listOfYears = addMonthAndRate(); // ezzel a metódussal rakjuk bele a fájl tartalmát egy HashMap-be.
+        makeList(listOfYears); // kiíratjuk a HashMap tartalmát szépen.
+        System.out.println();
+        System.out.println("Legnagyobb euro: " + maxEuroReturner(listOfYears)); // legnagyobb eurót íratjuk ki.
+        System.out.println();
+        averageExchangeRate(listOfYears); //átlag árfolyamot íratjuk ki.
 
+    }
+
+    public static void makeList(Map<Integer, HashMap> listOfYears) {
         for (Map.Entry<Integer, HashMap> entry : listOfYears.entrySet()) {
-            //System.out.print(entry.getKey() + ". ");
             HashMap<Integer, Integer> innerMap = entry.getValue();
             for(Map.Entry<Integer, Integer> innerEntry : innerMap.entrySet()) {
                 System.out.println(entry.getKey() + ". " + monthReturner(innerEntry.getKey()) + ": " + forintReturner(innerEntry.getValue()) + " forint " +
                         fillerReturner(innerEntry.getValue()) + " fillér.");
             }
         }
-
-
     }
 
     public static Map addMonthAndRate() throws IOException {
@@ -72,7 +71,28 @@ public class Main {
         return number % 100;
     }
 
-     
+    public static String maxEuroReturner (Map<Integer, HashMap> listOfYears) {
+        int max = 0;
+        for (Map.Entry<Integer, HashMap> entry : listOfYears.entrySet()) {
+            HashMap<Integer, Integer> innerMap = entry.getValue();
+            for(Map.Entry<Integer, Integer> innerEntry : innerMap.entrySet()) {
+                if(innerEntry.getValue() > max) max = innerEntry.getValue();
+            }
+        }
+        return forintReturner(max) + " forint " + fillerReturner(max) + " fillér.";
+    }
+
+    public static void averageExchangeRate(Map<Integer, HashMap> listOfYears) {
+        for (Map.Entry<Integer, HashMap> entry : listOfYears.entrySet()) {
+            HashMap<Integer, Integer> innerMap = entry.getValue();
+            int sum = 0;
+            for(Map.Entry<Integer, Integer> innerEntry : innerMap.entrySet()) {
+                sum += innerEntry.getValue();
+            }
+            if (entry.getKey() == 2009) System.out.println(entry.getKey() + "-ben " + forintReturner((sum / 11)) + " forint " + forintReturner((sum / 11)) + "fillér volt az átlagárfolyam.");
+            else System.out.println(entry.getKey() + "-ben " + forintReturner((sum / 12)) + " forint " + forintReturner((sum / 12)) + "fillér volt az átlagárfolyam.");
+        }
+    }
 }
 
 
